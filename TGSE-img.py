@@ -2,6 +2,8 @@ import requests
 import pandas as pd
 import os
 import math
+import PIL
+from PIL import Image
 
 #set wd to current dir
 os.chdir(os.path.dirname(__file__))
@@ -32,11 +34,16 @@ for i, id in enumerate(ids):
         #check if url blank
         if url == "nan":
             break
-        print(url)
-        print(type(url))
         
+        #get img from url
+        filename = str(int(id)) + letters[j]
+        img = Image.open(requests.get(url, stream=True).raw)
+
+        #resize img to have height of 1000 pixels
+        baseheight = 1000
+        hpercent = (baseheight / float(img.size[1]))
+        wsize = int((float(img.size[0]) * float(hpercent)))
+        img = img.resize((wsize, baseheight), PIL.Image.ANTIALIAS)
+
         #save img as id(A,B,...Z).jpg
-        filename = str(int(id)) + letters[j] + ".jpg"
-        print (filename)
-        r = requests.get(url, allow_redirects=True)
-        open(folder+'/'+filename, 'wb').write(r.content)
+        img.save(folder+'/'+filename+'.jpg')
