@@ -2,7 +2,6 @@ import requests
 import pandas as pd
 import os
 import math
-import PIL
 from PIL import Image
 
 #set wd to current dir
@@ -39,11 +38,13 @@ for i, id in enumerate(ids):
         filename = str(int(id)) + letters[j]
         img = Image.open(requests.get(url, stream=True).raw)
 
+        #square img with blank space
+        size = (max(img.size),)*2
+        layer = Image.new('RGB', size, (255,255,255))
+        layer.paste(img, tuple(map(lambda x:int((x[0]-x[1])/2), zip(size, img.size))))
         #resize img to have height of 1000 pixels
-        baseheight = 1000
-        hpercent = (baseheight / float(img.size[1]))
-        wsize = int((float(img.size[0]) * float(hpercent)))
-        img = img.resize((wsize, baseheight), PIL.Image.ANTIALIAS)
+        img = layer.resize((1000, 1000), Image.ANTIALIAS)
 
         #save img as id(A,B,...Z).jpg
         img.save(folder+'/'+filename+'.jpg')
+        
