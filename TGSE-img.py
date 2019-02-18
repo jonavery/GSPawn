@@ -6,6 +6,7 @@ from PIL import Image
 
 #set wd to current dir
 os.chdir(os.path.dirname(__file__))
+import image_manipulation as img_man
 
 #make vector of letters for image names
 letters = []
@@ -39,9 +40,7 @@ for i, id in enumerate(ids):
         img = Image.open(requests.get(url, stream=True).raw)
 
         #square img with blank space
-        size = (max(img.size),)*2
-        layer = Image.new('RGB', size, (255,255,255))
-        layer.paste(img, tuple(map(lambda x:int((x[0]-x[1])/2), zip(size, img.size))))
+        layer = img_man.square(img)
         #resize img to have height of 1000 pixels
         img = layer.resize((1000, 1000), Image.ANTIALIAS)
 
