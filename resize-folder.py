@@ -6,5 +6,5 @@ os.chdir(sys.argv[1])
 
 for f in os.listdir('.'):
     if os.path.isfile(f):
-        subprocess.call(["python","C:\Users\jon\Documents\img_resizer.py",f,1000])
+        subprocess.call(["python",r"C:\Users\jon\Documents\img_resizer.py",sys.argv[1]+"\\"+f])
         
